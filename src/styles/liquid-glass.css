@@ -103,6 +103,35 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .lg-view {
+    transition: none;
+  }
+
+  .lg-view[data-interactive='true']:active {
+    transform: none;
+  }
+
+  .lg-view[data-interactive='true']:active::after {
+    animation: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .lg-view {
+    --lg-border-opacity: 0.42;
+    --lg-highlight-opacity: 0.3;
+  }
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .lg-view {
+    --lg-bg-opacity: 0.32;
+    --lg-border-opacity: 0.28;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.16);
+  }
+}
+
 @keyframes lg-shimmer {
   0% {
     background-position: -120% 50%;
