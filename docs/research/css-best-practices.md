@@ -32,6 +32,7 @@ their courseware directly from this environment.
 ### Applied changes in this repo
 - Added prefers-reduced-motion and prefers-contrast handling.
 - Added @supports fallback tuning for lack of backdrop-filter.
+- Added --lg-backdrop-filter for optional SVG displacement filters.
 
 ### Optional future enhancements
 - Add a reduced transparency mode for browsers with forced-colors.

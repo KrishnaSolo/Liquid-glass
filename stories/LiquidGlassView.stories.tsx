@@ -27,6 +27,41 @@ const baseStyle: React.CSSProperties = {
   fontFamily: 'ui-sans-serif, system-ui, sans-serif'
 };
 
+type CSSVarStyle = React.CSSProperties & {
+  ['--lg-backdrop-filter']?: string;
+};
+
+const displacementStyle: CSSVarStyle = {
+  ...baseStyle,
+  '--lg-backdrop-filter': 'url(#lg-displacement) blur(18px) saturate(1.6)'
+};
+
+const DisplacementFilter = () => (
+  <svg
+    width="0"
+    height="0"
+    style={{ position: 'absolute' }}
+    aria-hidden="true"
+  >
+    <filter id="lg-displacement">
+      <feTurbulence
+        type="fractalNoise"
+        baseFrequency="0.015"
+        numOctaves={2}
+        result="noise"
+      />
+      <feDisplacementMap
+        in="SourceGraphic"
+        in2="noise"
+        scale="18"
+        xChannelSelector="R"
+        yChannelSelector="G"
+      />
+      <feGaussianBlur stdDeviation="2" />
+    </filter>
+  </svg>
+);
+
 const meta: Meta<typeof LiquidGlassView> = {
   title: 'LiquidGlass/LiquidGlassView',
   component: LiquidGlassView,
@@ -113,6 +148,21 @@ export const DarkScheme: Story = {
   render: (args) => (
     <Frame>
       <LiquidGlassView {...args} />
+    </Frame>
+  )
+};
+
+export const Displacement: Story = {
+  args: {
+    effect: 'clear',
+    style: displacementStyle
+  },
+  render: (args) => (
+    <Frame>
+      <DisplacementFilter />
+      <LiquidGlassView {...args}>
+        <div>Displacement filter</div>
+      </LiquidGlassView>
     </Frame>
   )
 };

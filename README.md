@@ -71,6 +71,42 @@ All standard div attributes are supported.
 
 All standard div attributes are supported.
 
+### Advanced: SVG displacement
+
+For a more refractive look, you can use an SVG filter and override the
+backdrop-filter via a CSS variable:
+
+```tsx
+<svg width="0" height="0" aria-hidden="true">
+  <filter id="lg-displacement">
+    <feTurbulence
+      type="fractalNoise"
+      baseFrequency="0.015"
+      numOctaves="2"
+      result="noise"
+    />
+    <feDisplacementMap
+      in="SourceGraphic"
+      in2="noise"
+      scale="18"
+      xChannelSelector="R"
+      yChannelSelector="G"
+    />
+    <feGaussianBlur stdDeviation="2" />
+  </filter>
+</svg>
+
+<LiquidGlassView
+  style={{
+    width: 240,
+    height: 120,
+    borderRadius: 24,
+    ['--lg-backdrop-filter' as string]:
+      'url(#lg-displacement) blur(18px) saturate(1.6)'
+  }}
+/>
+```
+
 ### Browser support
 
 The effect requires CSS backdrop-filter support. The library provides a
