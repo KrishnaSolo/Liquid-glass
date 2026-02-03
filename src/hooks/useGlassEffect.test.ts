@@ -10,9 +10,9 @@ describe('useGlassEffect', () => {
           useGlassEffect({ effect: 'regular', colorScheme: 'light' })
         );
 
-        expect(result.current.styles.backdropFilter).toBe('blur(20px) saturate(180%)');
-        expect(result.current.styles.WebkitBackdropFilter).toBe('blur(20px) saturate(180%)');
-        expect(result.current.styles.backgroundColor).toBe('rgba(255, 255, 255, 0.25)');
+        expect(result.current.styles.backdropFilter).toBe('blur(24px) saturate(180%) brightness(1.05)');
+        expect(result.current.styles.WebkitBackdropFilter).toBe('blur(24px) saturate(180%) brightness(1.05)');
+        expect(result.current.styles.backgroundColor).toBe('rgba(255, 255, 255, 0.2)');
       });
 
       it('returns regular blur styles for dark scheme', () => {
@@ -20,8 +20,8 @@ describe('useGlassEffect', () => {
           useGlassEffect({ effect: 'regular', colorScheme: 'dark' })
         );
 
-        expect(result.current.styles.backdropFilter).toBe('blur(20px) saturate(180%)');
-        expect(result.current.styles.backgroundColor).toBe('rgba(0, 0, 0, 0.35)');
+        expect(result.current.styles.backdropFilter).toBe('blur(24px) saturate(180%) brightness(0.95)');
+        expect(result.current.styles.backgroundColor).toBe('rgba(0, 0, 0, 0.3)');
       });
     });
 
@@ -31,8 +31,8 @@ describe('useGlassEffect', () => {
           useGlassEffect({ effect: 'clear', colorScheme: 'light' })
         );
 
-        expect(result.current.styles.backdropFilter).toBe('blur(12px) saturate(120%)');
-        expect(result.current.styles.backgroundColor).toBe('rgba(255, 255, 255, 0.1)');
+        expect(result.current.styles.backdropFilter).toBe('blur(16px) saturate(140%)');
+        expect(result.current.styles.backgroundColor).toBe('rgba(255, 255, 255, 0.08)');
       });
 
       it('returns clear blur styles for dark scheme', () => {
@@ -40,8 +40,8 @@ describe('useGlassEffect', () => {
           useGlassEffect({ effect: 'clear', colorScheme: 'dark' })
         );
 
-        expect(result.current.styles.backdropFilter).toBe('blur(12px) saturate(120%)');
-        expect(result.current.styles.backgroundColor).toBe('rgba(0, 0, 0, 0.2)');
+        expect(result.current.styles.backdropFilter).toBe('blur(16px) saturate(140%)');
+        expect(result.current.styles.backgroundColor).toBe('rgba(0, 0, 0, 0.15)');
       });
     });
 
@@ -63,7 +63,7 @@ describe('useGlassEffect', () => {
         useGlassEffect({ colorScheme: 'light' })
       );
 
-      expect(result.current.styles.backdropFilter).toBe('blur(20px) saturate(180%)');
+      expect(result.current.styles.backdropFilter).toBe('blur(24px) saturate(180%) brightness(1.05)');
     });
   });
 

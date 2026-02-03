@@ -44,7 +44,7 @@ describe('LiquidGlassView', () => {
       render(<LiquidGlassView>Content</LiquidGlassView>);
       const element = screen.getByText('Content').closest('.liquid-glass-view');
       expect(element).toHaveStyle({
-        backdropFilter: 'blur(20px) saturate(180%)',
+        backdropFilter: 'blur(24px) saturate(180%) brightness(1.05)',
       });
     });
 
@@ -52,7 +52,7 @@ describe('LiquidGlassView', () => {
       render(<LiquidGlassView effect="regular">Content</LiquidGlassView>);
       const element = screen.getByText('Content').closest('.liquid-glass-view');
       expect(element).toHaveStyle({
-        backdropFilter: 'blur(20px) saturate(180%)',
+        backdropFilter: 'blur(24px) saturate(180%) brightness(1.05)',
       });
     });
 
@@ -60,7 +60,7 @@ describe('LiquidGlassView', () => {
       render(<LiquidGlassView effect="clear">Content</LiquidGlassView>);
       const element = screen.getByText('Content').closest('.liquid-glass-view');
       expect(element).toHaveStyle({
-        backdropFilter: 'blur(12px) saturate(120%)',
+        backdropFilter: 'blur(16px) saturate(140%)',
       });
     });
 

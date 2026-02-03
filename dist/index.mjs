@@ -156,26 +156,28 @@ function applyTintToBackground(baseBackground, tintColor) {
 var GLASS_EFFECTS = {
   regular: {
     light: {
-      backdropFilter: "blur(20px) saturate(180%)",
-      WebkitBackdropFilter: "blur(20px) saturate(180%)",
-      backgroundColor: "rgba(255, 255, 255, 0.25)"
+      // Stronger blur and saturation for rich glass effect
+      backdropFilter: "blur(24px) saturate(180%) brightness(1.05)",
+      WebkitBackdropFilter: "blur(24px) saturate(180%) brightness(1.05)",
+      backgroundColor: "rgba(255, 255, 255, 0.2)"
     },
     dark: {
-      backdropFilter: "blur(20px) saturate(180%)",
-      WebkitBackdropFilter: "blur(20px) saturate(180%)",
-      backgroundColor: "rgba(0, 0, 0, 0.35)"
+      backdropFilter: "blur(24px) saturate(180%) brightness(0.95)",
+      WebkitBackdropFilter: "blur(24px) saturate(180%) brightness(0.95)",
+      backgroundColor: "rgba(0, 0, 0, 0.3)"
     }
   },
   clear: {
     light: {
-      backdropFilter: "blur(12px) saturate(120%)",
-      WebkitBackdropFilter: "blur(12px) saturate(120%)",
-      backgroundColor: "rgba(255, 255, 255, 0.1)"
+      // Lighter blur, more transparent
+      backdropFilter: "blur(16px) saturate(140%)",
+      WebkitBackdropFilter: "blur(16px) saturate(140%)",
+      backgroundColor: "rgba(255, 255, 255, 0.08)"
     },
     dark: {
-      backdropFilter: "blur(12px) saturate(120%)",
-      WebkitBackdropFilter: "blur(12px) saturate(120%)",
-      backgroundColor: "rgba(0, 0, 0, 0.2)"
+      backdropFilter: "blur(16px) saturate(140%)",
+      WebkitBackdropFilter: "blur(16px) saturate(140%)",
+      backgroundColor: "rgba(0, 0, 0, 0.15)"
     }
   },
   none: {
@@ -216,11 +218,15 @@ function useGlassEffect(options) {
     }
     let boxShadow;
     if (interactive && effect !== "none") {
-      if (interactiveState.isHovered) {
-        boxShadow = colorScheme === "dark" ? "0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1)" : "0 8px 32px rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.3)";
+      if (interactiveState.isPressed) {
+        boxShadow = colorScheme === "dark" ? "0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)";
+      } else if (interactiveState.isHovered) {
+        boxShadow = colorScheme === "dark" ? "0 8px 32px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.1)" : "0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 1px rgba(255, 255, 255, 0.5)";
       } else {
-        boxShadow = colorScheme === "dark" ? "0 4px 16px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.08)" : "0 4px 16px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.2)";
+        boxShadow = colorScheme === "dark" ? "0 4px 16px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.15)" : "0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04)";
       }
+    } else if (effect !== "none") {
+      boxShadow = colorScheme === "dark" ? "0 2px 8px rgba(0, 0, 0, 0.2)" : "0 2px 8px rgba(0, 0, 0, 0.06)";
     }
     return {
       backdropFilter: baseStyles.backdropFilter,
