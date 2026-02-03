@@ -1,0 +1,82 @@
+/* src/styles/glass.css */
+.liquid-glass-view {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.liquid-glass-view::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.liquid-glass-view--light::before {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+.liquid-glass-view--dark::before {
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.liquid-glass-view--interactive {
+  cursor: pointer;
+  user-select: none;
+}
+.liquid-glass-view--interactive::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.2) 45%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0.2) 55%,
+      transparent 60%);
+  background-size: 200% 100%;
+  background-position: 200% 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  pointer-events: none;
+}
+.liquid-glass-view--interactive:hover::after {
+  opacity: 1;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .liquid-glass-view,
+  .liquid-glass-view::before,
+  .liquid-glass-view::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  .liquid-glass-view--interactive:hover::after {
+    opacity: 0;
+  }
+}
+.liquid-glass-container {
+  position: relative;
+  isolation: isolate;
+}
+.liquid-glass-container > .liquid-glass-view {
+  position: relative;
+}
+.liquid-glass-container--merging {
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: inherit;
+}
+.liquid-glass-container--merging > .liquid-glass-view {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+/*# sourceMappingURL=index.css.map */
