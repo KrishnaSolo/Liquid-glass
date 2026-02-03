@@ -1,0 +1,113 @@
+.lg-container {
+  position: relative;
+}
+
+.lg-view {
+  --lg-light-rgb: 255, 255, 255;
+  --lg-dark-rgb: 18, 18, 18;
+  --lg-base-rgb: var(--lg-light-rgb);
+  --lg-blur: 24px;
+  --lg-saturation: 1.6;
+  --lg-bg-opacity: 0.2;
+  --lg-border-opacity: 0.24;
+  --lg-highlight-opacity: 0.22;
+  --lg-tint-opacity: 0.2;
+  --lg-merge-spacing: 0px;
+  --lg-tint-color: transparent;
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background-color: rgba(var(--lg-base-rgb), var(--lg-bg-opacity));
+  border: 1px solid rgba(255, 255, 255, var(--lg-border-opacity));
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.2),
+    0 0 0 var(--lg-merge-spacing) rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation));
+  -webkit-backdrop-filter: blur(var(--lg-blur)) saturate(var(--lg-saturation));
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 150ms ease;
+  will-change: transform;
+}
+
+.lg-view::before,
+.lg-view::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.lg-view::before {
+  background: var(--lg-tint-color);
+  opacity: var(--lg-tint-opacity);
+}
+
+.lg-view::after {
+  background-image: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, var(--lg-highlight-opacity)) 45%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+}
+
+.lg-view[data-interactive='true'] {
+  cursor: pointer;
+}
+
+.lg-view[data-interactive='true']:active {
+  transform: scale(0.98);
+}
+
+.lg-view[data-interactive='true']:active::after {
+  animation: lg-shimmer 650ms ease;
+}
+
+.lg-view[data-effect='clear'] {
+  --lg-blur: 14px;
+  --lg-bg-opacity: 0.12;
+  --lg-border-opacity: 0.18;
+  --lg-highlight-opacity: 0.16;
+}
+
+.lg-view[data-effect='none'] {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.lg-view[data-scheme='dark'] {
+  --lg-base-rgb: var(--lg-dark-rgb);
+  --lg-bg-opacity: 0.26;
+  --lg-border-opacity: 0.16;
+}
+
+.lg-view[data-scheme='system'] {
+  --lg-base-rgb: var(--lg-light-rgb);
+}
+
+@media (prefers-color-scheme: dark) {
+  .lg-view[data-scheme='system'] {
+    --lg-base-rgb: var(--lg-dark-rgb);
+    --lg-bg-opacity: 0.26;
+    --lg-border-opacity: 0.16;
+  }
+}
+
+@keyframes lg-shimmer {
+  0% {
+    background-position: -120% 50%;
+  }
+  100% {
+    background-position: 120% 50%;
+  }
+}
