@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>spec/web-port-spec.md</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(15, 23, 42, 0.9);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 20px 50px rgba(2, 6, 23, 0.5);
+      }
+      a {
+        color: #7dd3fc;
+      }
+      nav {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        font-size: 14px;
+      }
+      pre {
+        background: rgba(15, 23, 42, 0.6);
+        padding: 16px;
+        border-radius: 12px;
+        overflow: auto;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      h1, h2, h3 {
+        color: #f8fafc;
+      }
+      ul {
+        padding-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <a href="../">Docs home</a>
+        
+      </nav>
+      <h2>Web port spec for Liquid Glass (React)</h2>
+<h3>Goals</h3>
+<ul>
+<li>Provide a web React component library that mirrors the React Native API:<ul>
+<li>LiquidGlassView</li>
+<li>LiquidGlassContainerView</li>
+<li>isLiquidGlassSupported</li>
+</ul>
+</li>
+<li>Match the qualitative visuals and interaction behavior as closely as web APIs allow.</li>
+<li>Keep the API surface small, consistent, and extensible.</li>
+<li>Provide verification via Storybook and automated tests.</li>
+<li>Support SSR-safe rendering and graceful fallbacks.</li>
+</ul>
+<h3>Non-goals</h3>
+<ul>
+<li>Re-implement native iOS UIGlassEffect pixel-perfect behavior.</li>
+<li>Add new props not present in the RN API unless required for web parity.</li>
+<li>Depend on GPU-heavy shaders or WebGL by default (can be layered later).</li>
+</ul>
+<h3>API mapping</h3>
+<h4>LiquidGlassView props</h4>
+<table>
+<thead>
+<tr>
+<th>RN prop</th>
+<th>Web mapping</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>interactive</td>
+<td>Enables press feedback (scale and shimmer overlay).</td>
+</tr>
+<tr>
+<td>effect</td>
+<td>Controls blur/opacity level: clear, regular, or none (no effect).</td>
+</tr>
+<tr>
+<td>tintColor</td>
+<td>Applies a color overlay to the glass layer via CSS variables.</td>
+</tr>
+<tr>
+<td>colorScheme</td>
+<td>Forces light/dark rendering or uses system preference for &quot;system&quot;.</td>
+</tr>
+</tbody></table>
+<h4>LiquidGlassContainerView props</h4>
+<table>
+<thead>
+<tr>
+<th>RN prop</th>
+<th>Web mapping</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>spacing</td>
+<td>Provides a merge threshold to children via context and CSS variables.</td>
+</tr>
+</tbody></table>
+<h4>isLiquidGlassSupported</h4>
+<p>Web detection uses CSS.supports for backdrop-filter / -webkit-backdrop-filter.
+Falls back to false for SSR or when CSS is unavailable.</p>
+<h3>Component behavior</h3>
+<ul>
+<li>LiquidGlassView uses a single div with pseudo-elements for highlights.</li>
+<li>CSS variables control blur, opacity, tint, and interaction visuals.</li>
+<li>&quot;none&quot; effect disables backdrop-filter and removes decorations.</li>
+<li>&quot;clear&quot; reduces blur and background opacity compared to &quot;regular&quot;.</li>
+<li>Interactive state uses :active to drive a subtle scale and shimmer.</li>
+</ul>
+<h3>Container behavior</h3>
+<ul>
+<li>LiquidGlassContainerView provides spacing to children via React context.</li>
+<li>Children read spacing and apply it to CSS variables (merge heuristics).</li>
+<li>Container does not force layout (no flex or grid) to avoid unexpected changes.</li>
+</ul>
+<h3>Styling strategy</h3>
+<ul>
+<li>CSS variables allow fine control and theming:<ul>
+<li>--lg-blur</li>
+<li>--lg-saturation</li>
+<li>--lg-bg-opacity</li>
+<li>--lg-border-opacity</li>
+<li>--lg-tint-color</li>
+<li>--lg-merge-spacing</li>
+<li>--lg-highlight-opacity</li>
+</ul>
+</li>
+<li>Data attributes drive variant rules:<ul>
+<li>data-effect</li>
+<li>data-interactive</li>
+<li>data-scheme</li>
+</ul>
+</li>
+</ul>
+<h3>Performance considerations</h3>
+<ul>
+<li>Use backdrop-filter only when effect is not &quot;none&quot;.</li>
+<li>Use will-change and contain where applicable.</li>
+<li>Avoid heavy box-shadow stacks; use a single shadow plus overlay.</li>
+<li>Avoid layout thrashing by limiting DOM nodes (one element + pseudo-elements).</li>
+</ul>
+<h3>Accessibility</h3>
+<ul>
+<li>No ARIA roles by default; consumers provide as needed.</li>
+<li>Ensure no focus traps or pointer blocking on overlays (pointer-events: none).</li>
+<li>Keep color scheme alignment with prefers-color-scheme when in &quot;system&quot;.</li>
+</ul>
+<h3>SSR and hydration</h3>
+<ul>
+<li>isLiquidGlassSupported returns false on server.</li>
+<li>Components render safely without window or CSS access.</li>
+</ul>
+<h3>Verification plan</h3>
+<h4>Storybook (manual and visual verification)</h4>
+<ul>
+<li>Story: default view (regular)</li>
+<li>Story: clear vs regular vs none</li>
+<li>Story: interactive on/off</li>
+<li>Story: tintColor variations</li>
+<li>Story: light/dark/system colorScheme</li>
+<li>Story: container spacing interactions</li>
+</ul>
+<h4>Automated tests (Vitest + React Testing Library)</h4>
+<ul>
+<li>LiquidGlassView:<ul>
+<li>Defaults: effect=regular, interactive=false, colorScheme=system.</li>
+<li>Data attributes and CSS variables set correctly.</li>
+<li>Effect &quot;none&quot; disables class-based effect rule.</li>
+</ul>
+</li>
+<li>LiquidGlassContainerView:<ul>
+<li>Provides spacing via context.</li>
+<li>Sets CSS variable on container.</li>
+</ul>
+</li>
+<li>isLiquidGlassSupported:<ul>
+<li>False in jsdom when CSS.supports is missing.</li>
+</ul>
+</li>
+</ul>
+<h4>Drift prevention</h4>
+<ul>
+<li>Each implementation phase includes a verification step:<ul>
+<li>Phase 1: scaffold + build config (no tests yet).</li>
+<li>Phase 2: component implementation verified in Storybook.</li>
+<li>Phase 3: tests for props and CSS variables.</li>
+<li>Phase 4: final review and integration run.</li>
+</ul>
+</li>
+</ul>
+<h3>Implementation phases</h3>
+<ol>
+<li>Scaffold library structure and base configuration.</li>
+<li>Implement components and CSS (core visuals).</li>
+<li>Add Storybook with stories covering the API surface.</li>
+<li>Add unit tests and jsdom setup.</li>
+<li>Run tests and review implementation for parity and quality.</li>
+</ol>
+
+    </main>
+  </body>
+</html>

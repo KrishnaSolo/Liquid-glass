@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>research/callstack-liquid-glass.md</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(15, 23, 42, 0.9);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 20px 50px rgba(2, 6, 23, 0.5);
+      }
+      a {
+        color: #7dd3fc;
+      }
+      nav {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        font-size: 14px;
+      }
+      pre {
+        background: rgba(15, 23, 42, 0.6);
+        padding: 16px;
+        border-radius: 12px;
+        overflow: auto;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      h1, h2, h3 {
+        color: #f8fafc;
+      }
+      ul {
+        padding-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <a href="../">Docs home</a>
+        
+      </nav>
+      <h2>Callstack Liquid Glass (React Native) research notes</h2>
+<h3>Source and scope</h3>
+<ul>
+<li>Repository: callstack/liquid-glass</li>
+<li>Package name: @callstack/liquid-glass</li>
+<li>Platforms: iOS and tvOS only. Android and other platforms fall back.</li>
+</ul>
+<h3>Public API surface (TypeScript)</h3>
+<p>Exports (src/index.tsx):</p>
+<ul>
+<li>LiquidGlassView</li>
+<li>LiquidGlassContainerView</li>
+<li>isLiquidGlassSupported</li>
+<li>LiquidGlassViewProps (NativeProps from native component)</li>
+<li>LiquidGlassContainerViewProps (NativeProps from native component)</li>
+</ul>
+<p>LiquidGlassView props (src/LiquidGlassViewNativeComponent.ts):</p>
+<ul>
+<li>interactive?: boolean (default false)<ul>
+<li>Enables touch interaction effects (grow on touch and shimmer).</li>
+<li>Note: README lists known issue that interactive is only set on mount.</li>
+</ul>
+</li>
+<li>effect?: &#39;clear&#39; | &#39;regular&#39; | &#39;none&#39; (default &#39;regular&#39;)<ul>
+<li>&#39;clear&#39; is more transparent.</li>
+<li>&#39;regular&#39; is standard blur.</li>
+<li>&#39;none&#39; removes glass effect but remains a transparent view.</li>
+<li>Changing effect animates materialization/dematerialization.</li>
+</ul>
+</li>
+<li>tintColor?: ColorValue (optional)<ul>
+<li>Overlay tint color applied to glass.</li>
+</ul>
+</li>
+<li>colorScheme?: &#39;light&#39; | &#39;dark&#39; | &#39;system&#39; (default &#39;system&#39;)<ul>
+<li>Controls appearance and adapts to system when set to &#39;system&#39;.</li>
+</ul>
+</li>
+</ul>
+<p>LiquidGlassContainerView props (src/LiquidGlassViewContainerNativeComponent.ts):</p>
+<ul>
+<li>spacing?: number (default 0)<ul>
+<li>The distance between child elements at which they begin to merge.</li>
+</ul>
+</li>
+</ul>
+<p>Utility:</p>
+<ul>
+<li>isLiquidGlassSupported: boolean constant<ul>
+<li>iOS 26+ check with runtime guard and Info.plist compatibility flag.</li>
+<li>Non-iOS builds export false.</li>
+</ul>
+</li>
+</ul>
+<h3>JS implementation details</h3>
+<ul>
+<li>Non-iOS fallback uses a regular View for both LiquidGlassView and LiquidGlassContainerView.</li>
+<li>isLiquidGlassSupported is false on non-iOS platforms.</li>
+<li>iOS builds export native components using codegenNativeComponent.</li>
+</ul>
+<h3>Native implementation details (iOS)</h3>
+<h4>LiquidGlassView.swift (UIVisualEffectView)</h4>
+<ul>
+<li>Uses UIGlassEffect (iOS 26) and UIGlassEffect.Style for clear/regular.</li>
+<li>style of &quot;none&quot; sets effect to a UIVisualEffect (note: TODO mentions nil assignment issues).</li>
+<li>interactive toggles UIGlassEffect.isInteractive.</li>
+<li>tintColor forwards to UIGlassEffect.tintColor.</li>
+<li>setupView is guarded by:<ul>
+<li>iOS/tvOS availability check</li>
+<li>runtime presence of UIGlassEffect class</li>
+<li>runtime presence of effectWithStyle selector</li>
+</ul>
+</li>
+<li>effect is assigned on first mount and animated when updated later.</li>
+</ul>
+<h4>LiquidGlassView.mm (React Native Fabric)</h4>
+<ul>
+<li>Wraps LiquidGlassViewImpl and forwards props:<ul>
+<li>effect -&gt; style</li>
+<li>interactive -&gt; isInteractive</li>
+<li>tintColor -&gt; effectTintColor</li>
+<li>colorScheme -&gt; overrideUserInterfaceStyle</li>
+</ul>
+</li>
+<li>Uses layoutSubviews to sync corner radius.</li>
+<li>Uses resolveBorderMetrics for complex border radii.</li>
+<li>Moves children into _view.contentView to preserve correct composition.</li>
+</ul>
+<h4>LiquidGlassContainerView.swift (UIVisualEffectView)</h4>
+<ul>
+<li>Uses UIGlassContainerEffect with spacing.</li>
+</ul>
+<h4>LiquidGlassContainerView.mm</h4>
+<ul>
+<li>Forwards spacing updates to native view.</li>
+<li>Mounts children into contentView.</li>
+</ul>
+<h4>NativeLiquidGlassModule</h4>
+<ul>
+<li>Exports constants: isLiquidGlassSupported.</li>
+<li>Supported when:<ul>
+<li>iOS/tvOS 26+</li>
+<li>UIDesignRequiresCompatibility is false in Info.plist.</li>
+</ul>
+</li>
+</ul>
+<h3>Behavioral notes and edge cases</h3>
+<ul>
+<li>There is a known issue: interactive prop does not update dynamically (only on mount).</li>
+<li>Support check is both compile-time and runtime guarded for early iOS 26 betas.</li>
+<li>Layout and border radii are handled natively for correct corner rendering.</li>
+</ul>
+<h3>Implications for web port</h3>
+<ul>
+<li>The API surface is small and prop-based.</li>
+<li>Key behaviors to mirror: effect modes, tinting, interaction shimmer, color scheme, and spacing-based merge for container.</li>
+<li>Need a runtime support check similar in spirit to isLiquidGlassSupported.</li>
+</ul>
+
+    </main>
+  </body>
+</html>

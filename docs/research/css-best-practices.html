@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>research/css-best-practices.md</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(15, 23, 42, 0.9);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 20px 50px rgba(2, 6, 23, 0.5);
+      }
+      a {
+        color: #7dd3fc;
+      }
+      nav {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        font-size: 14px;
+      }
+      pre {
+        background: rgba(15, 23, 42, 0.6);
+        padding: 16px;
+        border-radius: 12px;
+        overflow: auto;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      h1, h2, h3 {
+        color: #f8fafc;
+      }
+      ul {
+        padding-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <a href="../">Docs home</a>
+        
+      </nav>
+      <h2>CSS best-practices checklist for glassmorphism</h2>
+<h3>Summary</h3>
+<p>This is a distilled set of CSS best practices applied to glass-like UI effects,
+with concrete implications for the Liquid Glass web port. These guidelines
+align with general front-end performance and accessibility guidance (including
+common teachings from Frontend Masters courses) even though I cannot access
+their courseware directly from this environment.</p>
+<h3>Performance</h3>
+<ul>
+<li>Keep the DOM minimal. Prefer a single element plus pseudo-elements.</li>
+<li>Avoid stacking multiple large blurs; one backdrop-filter is ideal.</li>
+<li>Prefer small box-shadow stacks; a single shadow is cheaper.</li>
+<li>Use CSS variables to tune effects without recomputing layout.</li>
+<li>Limit animations to opacity/transform for GPU-friendly updates.</li>
+<li>Use will-change sparingly and only on elements that animate.</li>
+</ul>
+<h3>Progressive enhancement</h3>
+<ul>
+<li>Use @supports to provide fallback styling when backdrop-filter is unavailable.</li>
+<li>Provide runtime checks (isLiquidGlassSupported) for app-level fallbacks.</li>
+<li>Avoid hard dependency on browser-only APIs for SSR.</li>
+</ul>
+<h3>Accessibility</h3>
+<ul>
+<li>Respect prefers-reduced-motion by disabling shimmer and scale animation.</li>
+<li>Respect prefers-contrast by increasing border and highlight opacity.</li>
+<li>Ensure overlays do not block pointer events (pointer-events: none).</li>
+</ul>
+<h3>Color and theming</h3>
+<ul>
+<li>Use CSS variables for tint and opacity to allow theming.</li>
+<li>Support prefers-color-scheme via data attributes and media queries.</li>
+</ul>
+<h3>Applied changes in this repo</h3>
+<ul>
+<li>Added prefers-reduced-motion and prefers-contrast handling.</li>
+<li>Added @supports fallback tuning for lack of backdrop-filter.</li>
+<li>Added --lg-backdrop-filter for optional SVG displacement filters.</li>
+</ul>
+<h3>Optional future enhancements</h3>
+<ul>
+<li>Add a reduced transparency mode for browsers with forced-colors.</li>
+<li>Add visual regression tests for Storybook stories.</li>
+</ul>
+
+    </main>
+  </body>
+</html>

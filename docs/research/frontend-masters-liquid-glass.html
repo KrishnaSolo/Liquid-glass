@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>research/frontend-masters-liquid-glass.md</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 40px 20px;
+        background: #0f172a;
+        color: #e2e8f0;
+      }
+      main {
+        max-width: 900px;
+        margin: 0 auto;
+        background: rgba(15, 23, 42, 0.9);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 20px 50px rgba(2, 6, 23, 0.5);
+      }
+      a {
+        color: #7dd3fc;
+      }
+      nav {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 24px;
+        font-size: 14px;
+      }
+      pre {
+        background: rgba(15, 23, 42, 0.6);
+        padding: 16px;
+        border-radius: 12px;
+        overflow: auto;
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      h1, h2, h3 {
+        color: #f8fafc;
+      }
+      ul {
+        padding-left: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav>
+        <a href="../">Docs home</a>
+        
+      </nav>
+      <h2>Frontend Masters blog: &quot;Liquid Glass on the Web&quot;</h2>
+<p>Source: <a href="https://frontendmasters.com/blog/liquid-glass-on-the-web/">https://frontendmasters.com/blog/liquid-glass-on-the-web/</a></p>
+<h3>Key takeaways</h3>
+<ul>
+<li>The true liquid glass aesthetic is more than blur:<ul>
+<li>Refraction/distortion of the background.</li>
+<li>Edge highlights and specular shine.</li>
+<li>Varying frost levels and textured glass.</li>
+</ul>
+</li>
+<li>Accessibility: text contrast over unknown backgrounds is a major risk.<ul>
+<li>Frosting and overlays can help, but contrast must be verified.</li>
+</ul>
+</li>
+<li>Advanced techniques for realism:<ul>
+<li><code>backdrop-filter: url(#svg-filter)</code> with <code>feDisplacementMap</code> +
+<code>feGaussianBlur</code>.</li>
+<li>SVG filters can create refraction without heavy blur.</li>
+</ul>
+</li>
+</ul>
+<h3>How this informs the web port</h3>
+<ul>
+<li>The current CSS already includes:<ul>
+<li>Highlight overlay (<code>::after</code> shimmer).</li>
+<li>Subtle tint overlay (<code>::before</code>).</li>
+<li>Blur/saturation backdrop filter.</li>
+</ul>
+</li>
+<li>Added an opt-in CSS variable to support SVG filter displacement:<ul>
+<li><code>--lg-backdrop-filter</code> can be set to <code>url(#filter) blur(...)</code>.</li>
+<li>This maps directly to the blog&#39;s <code>backdrop-filter</code> technique.</li>
+</ul>
+</li>
+<li>Storybook includes a new &quot;Displacement&quot; story to visualize this option.</li>
+</ul>
+<h3>Accessibility notes</h3>
+<ul>
+<li>The blog calls out text contrast risks explicitly.</li>
+<li>Our implementation includes:<ul>
+<li><code>prefers-reduced-motion</code> for animation safety.</li>
+<li><code>prefers-contrast: more</code> to boost borders/highlights.</li>
+<li>Fallback styling when backdrop-filter is unavailable.</li>
+</ul>
+</li>
+</ul>
+
+    </main>
+  </body>
+</html>
