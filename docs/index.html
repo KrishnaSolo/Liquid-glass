@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Glass React - iOS 26 Glass Effect for Web</title>
+  <meta name="description" content="A React component library bringing iOS 26's liquid glass effect to the web using CSS backdrop-filter.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Background -->
+  <div class="hero-bg"></div>
+  
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon">◈</span>
+        Liquid Glass
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#installation">Install</a>
+        <a href="api.html">API</a>
+        <a href="demo.html" class="nav-btn">Live Demo</a>
+        <a href="https://github.com/KrishnaSolo/Liquid-glass" class="nav-btn nav-btn-outline">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">React Component Library</div>
+      <h1 class="hero-title">
+        Liquid Glass
+        <span class="hero-title-gradient">for React</span>
+      </h1>
+      <p class="hero-description">
+        Bring iOS 26's stunning liquid glass effect to your web applications. 
+        A lightweight React component library using CSS backdrop-filter.
+      </p>
+      <div class="hero-actions">
+        <a href="demo.html" class="btn btn-primary">
+          <span>Try Demo</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="#installation" class="btn btn-secondary">Get Started</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">~11KB</span>
+          <span class="stat-label">Bundle Size</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">118</span>
+          <span class="stat-label">Tests Passing</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">96%+</span>
+          <span class="stat-label">Browser Support</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Hero Demo Card -->
+    <div class="hero-demo">
+      <div class="demo-card glass-effect">
+        <div class="demo-card-header">
+          <span class="demo-dot red"></span>
+          <span class="demo-dot yellow"></span>
+          <span class="demo-dot green"></span>
+        </div>
+        <div class="demo-card-content">
+          <p class="demo-city">San Francisco</p>
+          <p class="demo-temp">72°</p>
+          <p class="demo-icon">☀️</p>
+          <p class="demo-condition">Sunny</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section id="features" class="features">
+    <div class="container">
+      <h2 class="section-title">Features</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">✨</div>
+          <h3>iOS 26 Liquid Glass</h3>
+          <p>Authentic glass effect using CSS backdrop-filter with blur, saturation, and brightness adjustments.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>Customizable Tints</h3>
+          <p>Apply any color tint to your glass elements for branded or themed interfaces.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔧</div>
+          <h3>Three Effect Modes</h3>
+          <p>Choose between regular, clear, or none effects with smooth animated transitions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌓</div>
+          <h3>Dark Mode Support</h3>
+          <p>Automatic system preference detection or manual light/dark scheme control.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👆</div>
+          <h3>Interactive Effects</h3>
+          <p>Built-in hover and press effects with scale transforms and shimmer animations.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📦</div>
+          <h3>Tiny Bundle</h3>
+          <p>Only ~11KB minified with tree-shaking support. No external dependencies.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Installation Section -->
+  <section id="installation" class="installation">
+    <div class="container">
+      <h2 class="section-title">Installation</h2>
+      <div class="install-grid">
+        <div class="install-step">
+          <h3>1. Install the package</h3>
+          <div class="code-block">
+            <pre><code>npm install @liquid-glass/react</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
+        <div class="install-step">
+          <h3>2. Import and use</h3>
+          <div class="code-block">
+            <pre><code>import { LiquidGlassView } from '@liquid-glass/react';
+
+function MyComponent() {
+  return (
+    &lt;LiquidGlassView
+      style={{ padding: 20, borderRadius: 20 }}
+      effect="regular"
+      interactive
+    &gt;
+      &lt;span&gt;Hello Glass!&lt;/span&gt;
+    &lt;/LiquidGlassView&gt;
+  );
+}</code></pre>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Examples Section -->
+  <section id="examples" class="examples">
+    <div class="container">
+      <h2 class="section-title">Examples</h2>
+      <div class="examples-grid">
+        <!-- Weather Widget -->
+        <div class="example-card">
+          <h3>Weather Widget</h3>
+          <div class="example-preview" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+            <div class="glass-effect example-widget">
+              <p style="font-size: 14px; opacity: 0.9;">New York</p>
+              <p style="font-size: 36px; font-weight: 200;">68°</p>
+              <p style="font-size: 20px;">🌤️</p>
+            </div>
+          </div>
+          <div class="code-block small">
+            <pre><code>&lt;LiquidGlassView effect="regular" interactive&gt;
+  ...
+&lt;/LiquidGlassView&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- Button -->
+        <div class="example-card">
+          <h3>Glass Button</h3>
+          <div class="example-preview" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+            <div class="glass-effect example-button">
+              Click Me
+            </div>
+          </div>
+          <div class="code-block small">
+            <pre><code>&lt;LiquidGlassView 
+  effect="regular" 
+  interactive
+  colorScheme="dark"
+&gt;
+  Click Me
+&lt;/LiquidGlassView&gt;</code></pre>
+          </div>
+        </div>
+
+        <!-- Tinted -->
+        <div class="example-card">
+          <h3>Tinted Glass</h3>
+          <div class="example-preview" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
+            <div class="glass-effect example-tinted" style="background: rgba(255, 107, 107, 0.25);">
+              <p>🔥 Trending</p>
+            </div>
+          </div>
+          <div class="code-block small">
+            <pre><code>&lt;LiquidGlassView 
+  effect="clear"
+  tintColor="#ff6b6b"
+&gt;
+  🔥 Trending
+&lt;/LiquidGlassView&gt;</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- API Preview Section -->
+  <section id="api-preview" class="api-preview">
+    <div class="container">
+      <h2 class="section-title">API Reference</h2>
+      <div class="api-table-wrapper">
+        <table class="api-table">
+          <thead>
+            <tr>
+              <th>Prop</th>
+              <th>Type</th>
+              <th>Default</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>effect</code></td>
+              <td><code>'regular' | 'clear' | 'none'</code></td>
+              <td><code>'regular'</code></td>
+              <td>Visual effect mode</td>
+            </tr>
+            <tr>
+              <td><code>interactive</code></td>
+              <td><code>boolean</code></td>
+              <td><code>false</code></td>
+              <td>Enable hover/press effects</td>
+            </tr>
+            <tr>
+              <td><code>colorScheme</code></td>
+              <td><code>'light' | 'dark' | 'system'</code></td>
+              <td><code>'system'</code></td>
+              <td>Color scheme preference</td>
+            </tr>
+            <tr>
+              <td><code>tintColor</code></td>
+              <td><code>string</code></td>
+              <td><code>undefined</code></td>
+              <td>Color tint overlay</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="api-cta">
+        <a href="api.html" class="btn btn-secondary">View Full API Documentation</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="container">
+      <div class="cta-content glass-effect">
+        <h2>Ready to add some glass?</h2>
+        <p>Try the interactive demo or check out the full documentation.</p>
+        <div class="cta-actions">
+          <a href="demo.html" class="btn btn-primary">Interactive Demo</a>
+          <a href="https://github.com/KrishnaSolo/Liquid-glass" class="btn btn-secondary">View on GitHub</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="logo-icon">◈</span>
+          <span>Liquid Glass React</span>
+        </div>
+        <p class="footer-credit">
+          A web port of <a href="https://github.com/callstack/liquid-glass">callstack/liquid-glass</a>
+        </p>
+        <div class="footer-links">
+          <a href="https://github.com/KrishnaSolo/Liquid-glass">GitHub</a>
+          <a href="api.html">API Docs</a>
+          <a href="demo.html">Demo</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function copyCode(btn) {
+      const code = btn.previousElementSibling.textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Glass Demo - Interactive Sandbox</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background container */
+    .background-container {
+      position: fixed;
+      inset: 0;
+      transition: background 0.5s ease;
+    }
+
+    /* Different backgrounds */
+    .bg-gradient-purple {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .bg-gradient-sunset {
+      background: linear-gradient(135deg, #ff6b6b 0%, #feca57 50%, #48dbfb 100%);
+    }
+
+    .bg-gradient-ocean {
+      background: linear-gradient(180deg, #0077b6 0%, #00b4d8 50%, #90e0ef 100%);
+    }
+
+    .bg-gradient-forest {
+      background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+    }
+
+    .bg-image-nature {
+      background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80') center/cover;
+    }
+
+    .bg-image-city {
+      background: url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=1920&q=80') center/cover;
+    }
+
+    .bg-image-abstract {
+      background: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&q=80') center/cover;
+    }
+
+    .bg-pattern-dots {
+      background-color: #1a1a2e;
+      background-image: radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .bg-colorful {
+      background: 
+        linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+        linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%),
+        linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+    }
+
+    /* Controls panel */
+    .controls {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .control-group {
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 16px;
+      border-radius: 12px;
+      color: white;
+    }
+
+    .control-group h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.7;
+      margin-bottom: 10px;
+    }
+
+    .control-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .control-btn {
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .control-btn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .control-btn.active {
+      background: rgba(255,255,255,0.3);
+      border-color: rgba(255,255,255,0.5);
+    }
+
+    /* Instructions */
+    .instructions {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      padding: 16px;
+      border-radius: 12px;
+      color: white;
+      font-size: 14px;
+      max-width: 300px;
+      z-index: 1000;
+    }
+
+    .instructions h4 {
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .instructions p {
+      opacity: 0.8;
+      line-height: 1.5;
+    }
+
+    /* Demo container */
+    #demo-root {
+      position: relative;
+      z-index: 100;
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div class="background-container bg-gradient-purple" id="bg-container"></div>
+  
+  <!-- Back to Docs Navigation -->
+  <nav style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2000;
+    padding: 12px 20px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  ">
+    <a href="index.html" style="
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 16px;
+    ">
+      <span style="font-size: 20px;">◈</span>
+      Liquid Glass
+    </a>
+    <div style="display: flex; gap: 16px;">
+      <a href="index.html" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px;">Home</a>
+      <a href="api.html" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px;">API</a>
+      <a href="https://github.com/KrishnaSolo/Liquid-glass" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px;">GitHub</a>
+    </div>
+  </nav>
+  
+  <div class="controls" style="top: 70px;">
+    <div class="control-group">
+      <h3>Background</h3>
+      <div class="control-buttons">
+        <button class="control-btn active" data-bg="bg-gradient-purple">Purple</button>
+        <button class="control-btn" data-bg="bg-gradient-sunset">Sunset</button>
+        <button class="control-btn" data-bg="bg-gradient-ocean">Ocean</button>
+        <button class="control-btn" data-bg="bg-gradient-forest">Forest</button>
+        <button class="control-btn" data-bg="bg-image-nature">Nature</button>
+        <button class="control-btn" data-bg="bg-image-city">City</button>
+        <button class="control-btn" data-bg="bg-image-abstract">Abstract</button>
+        <button class="control-btn" data-bg="bg-pattern-dots">Dots</button>
+        <button class="control-btn" data-bg="bg-colorful">RGB</button>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <h3>Effect Mode</h3>
+      <div class="control-buttons">
+        <button class="control-btn active" data-effect="regular">Regular</button>
+        <button class="control-btn" data-effect="clear">Clear</button>
+        <button class="control-btn" data-effect="none">None</button>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <h3>Color Scheme</h3>
+      <div class="control-buttons">
+        <button class="control-btn active" data-scheme="system">System</button>
+        <button class="control-btn" data-scheme="light">Light</button>
+        <button class="control-btn" data-scheme="dark">Dark</button>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <h3>Tint Color</h3>
+      <div class="control-buttons">
+        <button class="control-btn active" data-tint="">None</button>
+        <button class="control-btn" data-tint="#ff6b6b" style="background: rgba(255,107,107,0.3)">Red</button>
+        <button class="control-btn" data-tint="#4ecdc4" style="background: rgba(78,205,196,0.3)">Teal</button>
+        <button class="control-btn" data-tint="#f39c12" style="background: rgba(243,156,18,0.3)">Orange</button>
+        <button class="control-btn" data-tint="#9b59b6" style="background: rgba(155,89,182,0.3)">Purple</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="instructions">
+    <h4>Interactive Demo</h4>
+    <p>Drag the glass cards around to see the liquid glass effect against different parts of the background. Use the controls to change backgrounds and effect settings.</p>
+  </div>
+  
+  <div id="demo-root"></div>
+
+  <!-- React and ReactDOM from CDN -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Inline library styles -->
+  <style>
+    /* Liquid Glass CSS - embedded from dist */
+    .liquid-glass-view {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    .liquid-glass-view::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, 0.1),
+        inset 0 1px 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 1px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .liquid-glass-view--light::before {
+      box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, 0.3),
+        inset 0 1px 2px 0 rgba(255, 255, 255, 0.4),
+        inset 1px 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset -1px 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .liquid-glass-view--dark::before {
+      box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, 0.08),
+        inset 0 1px 2px 0 rgba(255, 255, 255, 0.12),
+        inset 1px 0 1px 0 rgba(255, 255, 255, 0.05),
+        inset -1px 0 1px 0 rgba(255, 255, 255, 0.05),
+        inset 0 -1px 2px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    .liquid-glass-view::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.02) 40%,
+        rgba(0, 0, 0, 0.02) 60%,
+        rgba(0, 0, 0, 0.05) 100%
+      );
+      opacity: 1;
+      transition: opacity 0.2s ease-out;
+    }
+
+    .liquid-glass-view--interactive {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .liquid-glass-view--interactive::after {
+      background: linear-gradient(
+        105deg,
+        transparent 40%,
+        rgba(255, 255, 255, 0.15) 45%,
+        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0.15) 55%,
+        transparent 60%
+      );
+      background-size: 200% 100%;
+      background-position: 200% 0;
+      opacity: 0;
+      transition: opacity 0.3s ease-out, background-position 0s;
+    }
+
+    .liquid-glass-view--interactive:hover::after {
+      opacity: 1;
+      animation: shimmer 2s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    .liquid-glass-view--interactive:hover::before {
+      box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, 0.2),
+        inset 0 1px 3px 0 rgba(255, 255, 255, 0.3),
+        inset 1px 0 2px 0 rgba(255, 255, 255, 0.15),
+        inset -1px 0 2px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 2px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .liquid-glass-view,
+      .liquid-glass-view::before,
+      .liquid-glass-view::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    /* Draggable card styles */
+    .draggable-card {
+      position: absolute;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .draggable-card:active {
+      cursor: grabbing;
+    }
+
+    .draggable-card.dragging {
+      z-index: 1000;
+    }
+  </style>
+
+  <script type="text/babel">
+    const { useState, useRef, useEffect, useCallback, useMemo } = React;
+
+    // Glass effect configuration
+    const GLASS_EFFECTS = {
+      regular: {
+        light: {
+          backdropFilter: 'blur(24px) saturate(180%) brightness(1.05)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%) brightness(1.05)',
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        },
+        dark: {
+          backdropFilter: 'blur(24px) saturate(180%) brightness(0.95)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%) brightness(0.95)',
+          backgroundColor: 'rgba(0, 0, 0, 0.3)',
+        },
+      },
+      clear: {
+        light: {
+          backdropFilter: 'blur(16px) saturate(140%)',
+          WebkitBackdropFilter: 'blur(16px) saturate(140%)',
+          backgroundColor: 'rgba(255, 255, 255, 0.08)',
+        },
+        dark: {
+          backdropFilter: 'blur(16px) saturate(140%)',
+          WebkitBackdropFilter: 'blur(16px) saturate(140%)',
+          backgroundColor: 'rgba(0, 0, 0, 0.15)',
+        },
+      },
+      none: {
+        light: {
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          backgroundColor: 'transparent',
+        },
+        dark: {
+          backdropFilter: 'none',
+          WebkitBackdropFilter: 'none',
+          backgroundColor: 'transparent',
+        },
+      },
+    };
+
+    // Color parsing utility
+    function parseColor(color) {
+      if (!color) return null;
+      if (color === 'transparent') return { r: 0, g: 0, b: 0, a: 0 };
+      
+      if (color.startsWith('#')) {
+        const hex = color.slice(1);
+        let r, g, b, a = 1;
+        if (hex.length === 3) {
+          r = parseInt(hex[0] + hex[0], 16);
+          g = parseInt(hex[1] + hex[1], 16);
+          b = parseInt(hex[2] + hex[2], 16);
+        } else if (hex.length === 6) {
+          r = parseInt(hex.slice(0, 2), 16);
+          g = parseInt(hex.slice(2, 4), 16);
+          b = parseInt(hex.slice(4, 6), 16);
+        } else {
+          return null;
+        }
+        return { r, g, b, a };
+      }
+      return null;
+    }
+
+    function applyTintToBackground(baseBackground, tintColor) {
+      if (!tintColor) return baseBackground;
+      const tint = parseColor(tintColor);
+      if (!tint) return baseBackground;
+      const tintAlpha = Math.min(tint.a * 0.3, 0.4);
+      return `rgba(${tint.r}, ${tint.g}, ${tint.b}, ${tintAlpha})`;
+    }
+
+    // LiquidGlassView component
+    function LiquidGlassView({ 
+      children, 
+      className = '', 
+      style = {}, 
+      effect = 'regular', 
+      colorScheme = 'system',
+      tintColor,
+      interactive = false,
+      ...props 
+    }) {
+      const [interactiveState, setInteractiveState] = useState({ isHovered: false, isPressed: false });
+      
+      // Resolve color scheme
+      const resolvedScheme = useMemo(() => {
+        if (colorScheme !== 'system') return colorScheme;
+        if (typeof window !== 'undefined') {
+          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        return 'light';
+      }, [colorScheme]);
+
+      // Compute glass styles
+      const glassStyles = useMemo(() => {
+        const baseStyles = GLASS_EFFECTS[effect][resolvedScheme];
+        
+        let backgroundColor = baseStyles.backgroundColor;
+        if (tintColor && effect !== 'none') {
+          backgroundColor = applyTintToBackground(backgroundColor, tintColor);
+        }
+
+        let transform;
+        if (interactive) {
+          if (interactiveState.isPressed) {
+            transform = 'scale(0.97)';
+          } else if (interactiveState.isHovered) {
+            transform = 'scale(1.02)';
+          }
+        }
+
+        let boxShadow;
+        if (interactive && effect !== 'none') {
+          if (interactiveState.isPressed) {
+            boxShadow = resolvedScheme === 'dark'
+              ? '0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2)'
+              : '0 2px 8px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.08)';
+          } else if (interactiveState.isHovered) {
+            boxShadow = resolvedScheme === 'dark'
+              ? '0 8px 32px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 1px rgba(255, 255, 255, 0.1)'
+              : '0 8px 32px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 1px rgba(255, 255, 255, 0.5)';
+          } else {
+            boxShadow = resolvedScheme === 'dark'
+              ? '0 4px 16px rgba(0, 0, 0, 0.25), 0 2px 4px rgba(0, 0, 0, 0.15)'
+              : '0 4px 16px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04)';
+          }
+        } else if (effect !== 'none') {
+          boxShadow = resolvedScheme === 'dark'
+            ? '0 2px 8px rgba(0, 0, 0, 0.2)'
+            : '0 2px 8px rgba(0, 0, 0, 0.06)';
+        }
+
+        return {
+          ...baseStyles,
+          backgroundColor,
+          transform,
+          boxShadow,
+          transition: interactive
+            ? 'transform 0.2s ease-out, box-shadow 0.2s ease-out, backdrop-filter 0.3s ease-out, background-color 0.3s ease-out'
+            : 'backdrop-filter 0.3s ease-out, background-color 0.3s ease-out',
+        };
+      }, [effect, resolvedScheme, tintColor, interactive, interactiveState]);
+
+      const combinedClassName = [
+        'liquid-glass-view',
+        `liquid-glass-view--${resolvedScheme}`,
+        interactive && 'liquid-glass-view--interactive',
+        className,
+      ].filter(Boolean).join(' ');
+
+      const handlers = interactive ? {
+        onMouseEnter: () => setInteractiveState(s => ({ ...s, isHovered: true })),
+        onMouseLeave: () => setInteractiveState({ isHovered: false, isPressed: false }),
+        onMouseDown: () => setInteractiveState(s => ({ ...s, isPressed: true })),
+        onMouseUp: () => setInteractiveState(s => ({ ...s, isPressed: false })),
+      } : {};
+
+      return (
+        <div
+          className={combinedClassName}
+          style={{ ...glassStyles, ...style }}
+          {...handlers}
+          {...props}
+        >
+          {children}
+        </div>
+      );
+    }
+
+    // Draggable wrapper component
+    function DraggableCard({ children, initialPosition, style = {} }) {
+      const [position, setPosition] = useState(initialPosition);
+      const [isDragging, setIsDragging] = useState(false);
+      const dragOffset = useRef({ x: 0, y: 0 });
+
+      const handleMouseDown = (e) => {
+        if (e.target.closest('.no-drag')) return;
+        setIsDragging(true);
+        dragOffset.current = {
+          x: e.clientX - position.x,
+          y: e.clientY - position.y,
+        };
+      };
+
+      const handleMouseMove = useCallback((e) => {
+        if (!isDragging) return;
+        setPosition({
+          x: e.clientX - dragOffset.current.x,
+          y: e.clientY - dragOffset.current.y,
+        });
+      }, [isDragging]);
+
+      const handleMouseUp = useCallback(() => {
+        setIsDragging(false);
+      }, []);
+
+      useEffect(() => {
+        if (isDragging) {
+          window.addEventListener('mousemove', handleMouseMove);
+          window.addEventListener('mouseup', handleMouseUp);
+          return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', handleMouseUp);
+          };
+        }
+      }, [isDragging, handleMouseMove, handleMouseUp]);
+
+      // Touch support
+      const handleTouchStart = (e) => {
+        if (e.target.closest('.no-drag')) return;
+        const touch = e.touches[0];
+        setIsDragging(true);
+        dragOffset.current = {
+          x: touch.clientX - position.x,
+          y: touch.clientY - position.y,
+        };
+      };
+
+      const handleTouchMove = useCallback((e) => {
+        if (!isDragging) return;
+        const touch = e.touches[0];
+        setPosition({
+          x: touch.clientX - dragOffset.current.x,
+          y: touch.clientY - dragOffset.current.y,
+        });
+      }, [isDragging]);
+
+      useEffect(() => {
+        if (isDragging) {
+          window.addEventListener('touchmove', handleTouchMove);
+          window.addEventListener('touchend', handleMouseUp);
+          return () => {
+            window.removeEventListener('touchmove', handleTouchMove);
+            window.removeEventListener('touchend', handleMouseUp);
+          };
+        }
+      }, [isDragging, handleTouchMove, handleMouseUp]);
+
+      return (
+        <div
+          className={`draggable-card ${isDragging ? 'dragging' : ''}`}
+          style={{
+            left: position.x,
+            top: position.y,
+            ...style,
+          }}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+        >
+          {children}
+        </div>
+      );
+    }
+
+    // Main Demo App
+    function DemoApp() {
+      const [effect, setEffect] = useState('regular');
+      const [colorScheme, setColorScheme] = useState('system');
+      const [tintColor, setTintColor] = useState('');
+
+      // Setup background switcher
+      useEffect(() => {
+        const bgContainer = document.getElementById('bg-container');
+        const bgButtons = document.querySelectorAll('[data-bg]');
+        
+        bgButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            bgButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            bgContainer.className = 'background-container ' + btn.dataset.bg;
+          });
+        });
+      }, []);
+
+      // Setup effect switcher
+      useEffect(() => {
+        const effectButtons = document.querySelectorAll('[data-effect]');
+        effectButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            effectButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            setEffect(btn.dataset.effect);
+          });
+        });
+      }, []);
+
+      // Setup color scheme switcher
+      useEffect(() => {
+        const schemeButtons = document.querySelectorAll('[data-scheme]');
+        schemeButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            schemeButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            setColorScheme(btn.dataset.scheme);
+          });
+        });
+      }, []);
+
+      // Setup tint color switcher
+      useEffect(() => {
+        const tintButtons = document.querySelectorAll('[data-tint]');
+        tintButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            tintButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            setTintColor(btn.dataset.tint);
+          });
+        });
+      }, []);
+
+      return (
+        <>
+          {/* Weather Widget Card */}
+          <DraggableCard initialPosition={{ x: 100, y: 150 }}>
+            <LiquidGlassView
+              effect={effect}
+              colorScheme={colorScheme}
+              tintColor={tintColor}
+              interactive
+              style={{
+                padding: '20px',
+                borderRadius: '20px',
+                minWidth: '180px',
+              }}
+            >
+              <div style={{ color: 'white', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                <p style={{ fontSize: '16px', opacity: 0.9, marginBottom: '4px' }}>San Francisco</p>
+                <p style={{ fontSize: '48px', fontWeight: '200', margin: '8px 0' }}>72°</p>
+                <p style={{ fontSize: '28px', margin: '8px 0' }}>☀️</p>
+                <p style={{ fontSize: '14px', opacity: 0.7 }}>Sunny</p>
+              </div>
+            </LiquidGlassView>
+          </DraggableCard>
+
+          {/* Button Card */}
+          <DraggableCard initialPosition={{ x: 350, y: 150 }}>
+            <LiquidGlassView
+              effect={effect}
+              colorScheme={colorScheme}
+              tintColor={tintColor}
+              interactive
+              style={{
+                padding: '16px 32px',
+                borderRadius: '16px',
+              }}
+            >
+              <span style={{ 
+                color: 'white', 
+                fontSize: '18px', 
+                fontWeight: '600',
+                textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+              }}>
+                Click Me
+              </span>
+            </LiquidGlassView>
+          </DraggableCard>
+
+          {/* Toolbar Card */}
+          <DraggableCard initialPosition={{ x: 100, y: 420 }}>
+            <LiquidGlassView
+              effect={effect}
+              colorScheme={colorScheme}
+              tintColor={tintColor}
+              style={{
+                padding: '10px 20px',
+                borderRadius: '30px',
+                display: 'flex',
+                gap: '16px',
+              }}
+            >
+              {['File', 'Edit', 'View', 'Help'].map(item => (
+                <span 
+                  key={item}
+                  className="no-drag"
+                  style={{ 
+                    padding: '8px 12px', 
+                    color: 'white', 
+                    cursor: 'pointer',
+                    borderRadius: '8px',
+                    transition: 'background 0.2s',
+                    textShadow: '0 1px 2px rgba(0,0,0,0.3)',
+                  }}
+                  onMouseEnter={(e) => e.target.style.background = 'rgba(255,255,255,0.1)'}
+                  onMouseLeave={(e) => e.target.style.background = 'transparent'}
+                >
+                  {item}
+                </span>
+              ))}
+            </LiquidGlassView>
+          </DraggableCard>
+
+          {/* Circle Card */}
+          <DraggableCard initialPosition={{ x: 550, y: 280 }}>
+            <LiquidGlassView
+              effect={effect}
+              colorScheme={colorScheme}
+              tintColor={tintColor}
+              interactive
+              style={{
+                width: '100px',
+                height: '100px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <span style={{ fontSize: '32px' }}>👋</span>
+            </LiquidGlassView>
+          </DraggableCard>
+
+          {/* Info Card */}
+          <DraggableCard initialPosition={{ x: 350, y: 320 }}>
+            <LiquidGlassView
+              effect={effect}
+              colorScheme={colorScheme}
+              tintColor={tintColor}
+              style={{
+                padding: '24px',
+                borderRadius: '16px',
+                maxWidth: '250px',
+              }}
+            >
+              <div style={{ color: 'white', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                <h3 style={{ fontSize: '18px', marginBottom: '12px', fontWeight: '600' }}>
+                  Liquid Glass
+                </h3>
+                <p style={{ fontSize: '14px', opacity: 0.85, lineHeight: 1.5 }}>
+                  A beautiful frosted glass effect that adapts to any background.
+                  Drag me around to see!
+                </p>
+              </div>
+            </LiquidGlassView>
+          </DraggableCard>
+
+          {/* Music Player Card */}
+          <DraggableCard initialPosition={{ x: 700, y: 150 }}>
+            <LiquidGlassView
+              effect={effect}
+              colorScheme={colorScheme}
+              tintColor={tintColor}
+              interactive
+              style={{
+                padding: '20px',
+                borderRadius: '20px',
+                width: '280px',
+              }}
+            >
+              <div style={{ color: 'white', textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+                  <div style={{ 
+                    width: '60px', 
+                    height: '60px', 
+                    background: 'linear-gradient(135deg, #667eea, #764ba2)',
+                    borderRadius: '8px',
+                  }} />
+                  <div>
+                    <p style={{ fontSize: '16px', fontWeight: '600', marginBottom: '4px' }}>Now Playing</p>
+                    <p style={{ fontSize: '14px', opacity: 0.7 }}>Artist Name</p>
+                  </div>
+                </div>
+                <div style={{ 
+                  height: '4px', 
+                  background: 'rgba(255,255,255,0.2)', 
+                  borderRadius: '2px',
+                  marginBottom: '12px',
+                }}>
+                  <div style={{ 
+                    height: '100%', 
+                    width: '40%', 
+                    background: 'white',
+                    borderRadius: '2px',
+                  }} />
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '24px' }}>
+                  {['⏮️', '▶️', '⏭️'].map((icon, i) => (
+                    <span 
+                      key={i} 
+                      className="no-drag"
+                      style={{ fontSize: '24px', cursor: 'pointer' }}
+                    >
+                      {icon}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </LiquidGlassView>
+          </DraggableCard>
+        </>
+      );
+    }
+
+    // Render the app
+    const root = ReactDOM.createRoot(document.getElementById('demo-root'));
+    root.render(<DemoApp />);
+  </script>
+</body>
+</html>

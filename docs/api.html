@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Reference - Liquid Glass React</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+  <style>
+    .api-page {
+      padding-top: 100px;
+      min-height: 100vh;
+    }
+
+    .api-header {
+      padding: 60px 0;
+      text-align: center;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .api-header h1 {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .api-header p {
+      color: var(--color-text-muted);
+      font-size: 18px;
+    }
+
+    .api-content {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 48px;
+      padding: 48px 0;
+    }
+
+    .api-sidebar {
+      position: sticky;
+      top: 100px;
+      height: fit-content;
+    }
+
+    .api-sidebar h4 {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--color-text-muted);
+      margin-bottom: 16px;
+    }
+
+    .api-sidebar ul {
+      list-style: none;
+    }
+
+    .api-sidebar a {
+      display: block;
+      padding: 8px 16px;
+      font-size: 14px;
+      color: var(--color-text-muted);
+      border-left: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .api-sidebar a:hover,
+    .api-sidebar a.active {
+      color: white;
+      border-color: var(--color-primary);
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    .api-main section {
+      margin-bottom: 64px;
+      padding-bottom: 64px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .api-main section:last-child {
+      border-bottom: none;
+    }
+
+    .api-main h2 {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .api-main h3 {
+      font-size: 20px;
+      margin: 32px 0 16px;
+      color: var(--color-primary);
+    }
+
+    .api-main p {
+      color: var(--color-text-muted);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    .prop-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+
+    .prop-table th,
+    .prop-table td {
+      padding: 16px;
+      text-align: left;
+      border: 1px solid var(--color-border);
+    }
+
+    .prop-table th {
+      background: var(--color-surface);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .prop-table code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: rgba(102, 126, 234, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: var(--color-primary);
+    }
+
+    .prop-table td:first-child code {
+      background: rgba(40, 201, 64, 0.1);
+      color: #28c940;
+    }
+
+    .type-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(255, 189, 46, 0.1);
+      color: #ffbd2e;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+    }
+
+    .example-section {
+      background: var(--color-surface);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 24px 0;
+    }
+
+    .example-section h4 {
+      padding: 16px 20px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--color-border);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .example-section pre {
+      padding: 20px;
+      overflow-x: auto;
+    }
+
+    .example-section code {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: #e0e0e0;
+    }
+
+    .note {
+      padding: 16px 20px;
+      background: rgba(102, 126, 234, 0.1);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 0 8px 8px 0;
+      margin: 24px 0;
+    }
+
+    .note p {
+      margin: 0;
+      color: var(--color-text);
+    }
+
+    .note strong {
+      color: var(--color-primary);
+    }
+
+    @media (max-width: 968px) {
+      .api-content {
+        grid-template-columns: 1fr;
+      }
+
+      .api-sidebar {
+        position: static;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid var(--color-border);
+      }
+
+      .api-sidebar h4 {
+        width: 100%;
+      }
+
+      .api-sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .api-sidebar a {
+        border: 1px solid var(--color-border);
+        border-radius: 8px;
+        border-left-width: 1px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-bg"></div>
+  
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon">◈</span>
+        Liquid Glass
+      </a>
+      <div class="nav-links">
+        <a href="index.html#features">Features</a>
+        <a href="index.html#installation">Install</a>
+        <a href="api.html">API</a>
+        <a href="demo.html" class="nav-btn">Live Demo</a>
+        <a href="https://github.com/KrishnaSolo/Liquid-glass" class="nav-btn nav-btn-outline">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="api-page">
+    <header class="api-header">
+      <div class="container">
+        <h1>API Reference</h1>
+        <p>Complete documentation for all components, props, and utilities.</p>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="api-content">
+        <!-- Sidebar -->
+        <aside class="api-sidebar">
+          <h4>Components</h4>
+          <ul>
+            <li><a href="#liquid-glass-view" class="active">LiquidGlassView</a></li>
+            <li><a href="#liquid-glass-container">LiquidGlassContainerView</a></li>
+          </ul>
+          <h4 style="margin-top: 24px;">Utilities</h4>
+          <ul>
+            <li><a href="#is-supported">isLiquidGlassSupported</a></li>
+          </ul>
+          <h4 style="margin-top: 24px;">Hooks</h4>
+          <ul>
+            <li><a href="#use-color-scheme">useColorScheme</a></li>
+            <li><a href="#use-glass-effect">useGlassEffect</a></li>
+            <li><a href="#use-interactive">useInteractive</a></li>
+          </ul>
+          <h4 style="margin-top: 24px;">Types</h4>
+          <ul>
+            <li><a href="#types">TypeScript Types</a></li>
+          </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="api-main">
+          <!-- LiquidGlassView -->
+          <section id="liquid-glass-view">
+            <h2>LiquidGlassView</h2>
+            <p>
+              The primary component for creating liquid glass effects. It renders a div with 
+              backdrop-filter effects that create a frosted glass appearance.
+            </p>
+
+            <h3>Import</h3>
+            <div class="example-section">
+              <pre><code>import { LiquidGlassView } from '@liquid-glass/react';</code></pre>
+            </div>
+
+            <h3>Props</h3>
+            <table class="prop-table">
+              <thead>
+                <tr>
+                  <th>Prop</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>effect</code></td>
+                  <td><code>'regular' | 'clear' | 'none'</code></td>
+                  <td><code>'regular'</code></td>
+                  <td>
+                    Visual effect mode:<br>
+                    • <code>regular</code> - Standard frosted glass with strong blur<br>
+                    • <code>clear</code> - More transparent, subtle blur<br>
+                    • <code>none</code> - No glass effect (for transitions)
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>interactive</code></td>
+                  <td><code>boolean</code></td>
+                  <td><code>false</code></td>
+                  <td>
+                    Enables hover and press interaction effects including scale transforms 
+                    and shimmer animation.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>colorScheme</code></td>
+                  <td><code>'light' | 'dark' | 'system'</code></td>
+                  <td><code>'system'</code></td>
+                  <td>
+                    Color scheme preference:<br>
+                    • <code>system</code> - Follows OS preference<br>
+                    • <code>light</code> - Force light appearance<br>
+                    • <code>dark</code> - Force dark appearance
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>tintColor</code></td>
+                  <td><code>string</code></td>
+                  <td><code>undefined</code></td>
+                  <td>
+                    Optional color tint overlay. Accepts any valid CSS color 
+                    (hex, rgb, rgba, named colors).
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>children</code></td>
+                  <td><code>ReactNode</code></td>
+                  <td>-</td>
+                  <td>Content to render inside the glass container.</td>
+                </tr>
+                <tr>
+                  <td><code>className</code></td>
+                  <td><code>string</code></td>
+                  <td>-</td>
+                  <td>Additional CSS class names.</td>
+                </tr>
+                <tr>
+                  <td><code>style</code></td>
+                  <td><code>CSSProperties</code></td>
+                  <td>-</td>
+                  <td>Inline styles. Commonly used for padding, borderRadius, etc.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3>Basic Example</h3>
+            <div class="example-section">
+              <h4>Weather Widget</h4>
+              <pre><code>import { LiquidGlassView } from '@liquid-glass/react';
+
+function WeatherWidget() {
+  return (
+    &lt;LiquidGlassView
+      effect="regular"
+      interactive
+      colorScheme="dark"
+      style={{
+        padding: 20,
+        borderRadius: 20,
+        minWidth: 180,
+      }}
+    &gt;
+      &lt;p&gt;San Francisco&lt;/p&gt;
+      &lt;p style={{ fontSize: 48 }}&gt;72°&lt;/p&gt;
+      &lt;p&gt;☀️ Sunny&lt;/p&gt;
+    &lt;/LiquidGlassView&gt;
+  );
+}</code></pre>
+            </div>
+
+            <h3>With Tint Color</h3>
+            <div class="example-section">
+              <h4>Tinted Glass Button</h4>
+              <pre><code>&lt;LiquidGlassView
+  effect="clear"
+  tintColor="#ff6b6b"
+  interactive
+  style={{ padding: '16px 32px', borderRadius: 16 }}
+&gt;
+  &lt;span&gt;Hot Deal! 🔥&lt;/span&gt;
+&lt;/LiquidGlassView&gt;</code></pre>
+            </div>
+
+            <div class="note">
+              <p>
+                <strong>Note:</strong> For best results, place the LiquidGlassView over 
+                colorful or image backgrounds. The glass effect is most visible when there's 
+                content behind it to blur.
+              </p>
+            </div>
+          </section>
+
+          <!-- LiquidGlassContainerView -->
+          <section id="liquid-glass-container">
+            <h2>LiquidGlassContainerView</h2>
+            <p>
+              A container component that groups multiple glass elements together. When glass 
+              children are within the specified spacing distance, their effects can visually 
+              merge.
+            </p>
+
+            <h3>Import</h3>
+            <div class="example-section">
+              <pre><code>import { LiquidGlassContainerView } from '@liquid-glass/react';</code></pre>
+            </div>
+
+            <h3>Props</h3>
+            <table class="prop-table">
+              <thead>
+                <tr>
+                  <th>Prop</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>spacing</code></td>
+                  <td><code>number</code></td>
+                  <td><code>0</code></td>
+                  <td>
+                    The distance (in pixels) between child elements at which they 
+                    begin to merge their glass effects.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>children</code></td>
+                  <td><code>ReactNode</code></td>
+                  <td>-</td>
+                  <td>LiquidGlassView children to group together.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <h3>Example</h3>
+            <div class="example-section">
+              <h4>Merging Circles</h4>
+              <pre><code>import { 
+  LiquidGlassContainerView, 
+  LiquidGlassView 
+} from '@liquid-glass/react';
+
+function MergingCircles() {
+  return (
+    &lt;LiquidGlassContainerView 
+      spacing={20}
+      style={{ display: 'flex', gap: 10 }}
+    &gt;
+      &lt;LiquidGlassView 
+        effect="clear"
+        style={{ 
+          width: 100, 
+          height: 100, 
+          borderRadius: '50%' 
+        }}
+      /&gt;
+      &lt;LiquidGlassView 
+        effect="clear"
+        style={{ 
+          width: 100, 
+          height: 100, 
+          borderRadius: '50%' 
+        }}
+      /&gt;
+    &lt;/LiquidGlassContainerView&gt;
+  );
+}</code></pre>
+            </div>
+          </section>
+
+          <!-- isLiquidGlassSupported -->
+          <section id="is-supported">
+            <h2>isLiquidGlassSupported</h2>
+            <p>
+              A boolean constant that indicates whether the current browser supports 
+              the liquid glass effect (CSS <code>backdrop-filter</code>).
+            </p>
+
+            <h3>Import</h3>
+            <div class="example-section">
+              <pre><code>import { isLiquidGlassSupported } from '@liquid-glass/react';</code></pre>
+            </div>
+
+            <h3>Usage</h3>
+            <div class="example-section">
+              <h4>Conditional Fallback</h4>
+              <pre><code>import { 
+  LiquidGlassView, 
+  isLiquidGlassSupported 
+} from '@liquid-glass/react';
+
+function MyComponent() {
+  return (
+    &lt;LiquidGlassView
+      style={{
+        padding: 20,
+        borderRadius: 20,
+        // Fallback for unsupported browsers
+        ...(!isLiquidGlassSupported && {
+          backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        }),
+      }}
+    &gt;
+      Content here
+    &lt;/LiquidGlassView&gt;
+  );
+}</code></pre>
+            </div>
+
+            <div class="note">
+              <p>
+                <strong>Browser Support:</strong> backdrop-filter is supported in 96%+ of 
+                modern browsers including Chrome 76+, Firefox 103+, Safari 9+, and Edge 79+.
+              </p>
+            </div>
+          </section>
+
+          <!-- Hooks -->
+          <section id="use-color-scheme">
+            <h2>useColorScheme</h2>
+            <p>
+              A hook that resolves the effective color scheme based on the provided value 
+              and system preferences.
+            </p>
+
+            <h3>Import</h3>
+            <div class="example-section">
+              <pre><code>import { useColorScheme } from '@liquid-glass/react';</code></pre>
+            </div>
+
+            <h3>Signature</h3>
+            <div class="example-section">
+              <pre><code>function useColorScheme(
+  colorScheme?: 'light' | 'dark' | 'system'
+): 'light' | 'dark'</code></pre>
+            </div>
+
+            <h3>Example</h3>
+            <div class="example-section">
+              <pre><code>function MyComponent({ colorScheme = 'system' }) {
+  const resolved = useColorScheme(colorScheme);
+  
+  return (
+    &lt;div className={`theme-${resolved}`}&gt;
+      Current theme: {resolved}
+    &lt;/div&gt;
+  );
+}</code></pre>
+            </div>
+          </section>
+
+          <section id="use-glass-effect">
+            <h2>useGlassEffect</h2>
+            <p>
+              A hook that computes the CSS styles for the liquid glass effect based on 
+              the provided options.
+            </p>
+
+            <h3>Import</h3>
+            <div class="example-section">
+              <pre><code>import { useGlassEffect } from '@liquid-glass/react';</code></pre>
+            </div>
+
+            <h3>Options</h3>
+            <table class="prop-table">
+              <thead>
+                <tr>
+                  <th>Option</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>effect</code></td>
+                  <td><code>'regular' | 'clear' | 'none'</code></td>
+                  <td>Effect mode</td>
+                </tr>
+                <tr>
+                  <td><code>colorScheme</code></td>
+                  <td><code>'light' | 'dark'</code></td>
+                  <td>Resolved color scheme</td>
+                </tr>
+                <tr>
+                  <td><code>tintColor</code></td>
+                  <td><code>string</code></td>
+                  <td>Optional tint color</td>
+                </tr>
+                <tr>
+                  <td><code>interactive</code></td>
+                  <td><code>boolean</code></td>
+                  <td>Enable interactive styles</td>
+                </tr>
+                <tr>
+                  <td><code>interactiveState</code></td>
+                  <td><code>{ isHovered, isPressed }</code></td>
+                  <td>Current interactive state</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section id="use-interactive">
+            <h2>useInteractive</h2>
+            <p>
+              A hook that manages interactive state (hover/press) for glass components.
+            </p>
+
+            <h3>Import</h3>
+            <div class="example-section">
+              <pre><code>import { useInteractive } from '@liquid-glass/react';</code></pre>
+            </div>
+
+            <h3>Returns</h3>
+            <div class="example-section">
+              <pre><code>{
+  state: { isHovered: boolean, isPressed: boolean },
+  handlers: {
+    onMouseEnter,
+    onMouseLeave,
+    onMouseDown,
+    onMouseUp
+  }
+}</code></pre>
+            </div>
+          </section>
+
+          <!-- Types -->
+          <section id="types">
+            <h2>TypeScript Types</h2>
+            <p>All types are exported for TypeScript users.</p>
+
+            <h3>Import</h3>
+            <div class="example-section">
+              <pre><code>import type {
+  LiquidGlassViewProps,
+  LiquidGlassContainerViewProps,
+  GlassEffect,
+  ColorScheme,
+} from '@liquid-glass/react';</code></pre>
+            </div>
+
+            <h3>Type Definitions</h3>
+            <div class="example-section">
+              <pre><code>type GlassEffect = 'clear' | 'regular' | 'none';
+
+type ColorScheme = 'light' | 'dark' | 'system';
+
+interface LiquidGlassViewProps 
+  extends HTMLAttributes&lt;HTMLDivElement&gt; {
+  interactive?: boolean;
+  effect?: GlassEffect;
+  tintColor?: string;
+  colorScheme?: ColorScheme;
+  children?: ReactNode;
+}
+
+interface LiquidGlassContainerViewProps 
+  extends HTMLAttributes&lt;HTMLDivElement&gt; {
+  spacing?: number;
+  children?: ReactNode;
+}</code></pre>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="logo-icon">◈</span>
+          <span>Liquid Glass React</span>
+        </div>
+        <p class="footer-credit">
+          A web port of <a href="https://github.com/callstack/liquid-glass">callstack/liquid-glass</a>
+        </p>
+        <div class="footer-links">
+          <a href="https://github.com/KrishnaSolo/Liquid-glass">GitHub</a>
+          <a href="api.html">API Docs</a>
+          <a href="demo.html">Demo</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

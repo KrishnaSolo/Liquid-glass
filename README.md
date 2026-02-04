@@ -6,6 +6,12 @@
   <p>A web port of the <a href="https://github.com/callstack/liquid-glass">callstack/liquid-glass</a> React Native library.</p>
   
   <p>Bring iOS 26's beautiful liquid glass effect to your web applications.</p>
+
+  <p>
+    <a href="https://krishnasolo.github.io/Liquid-glass/">📖 Documentation</a> •
+    <a href="https://krishnasolo.github.io/Liquid-glass/demo.html">🎮 Live Demo</a> •
+    <a href="https://krishnasolo.github.io/Liquid-glass/api.html">📚 API Reference</a>
+  </p>
 </div>
 
 ## Features
