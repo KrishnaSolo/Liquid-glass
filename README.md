@@ -113,6 +113,15 @@ The effect requires CSS backdrop-filter support. The library provides a
 runtime check via isLiquidGlassSupported and falls back to normal rendering
 when the effect is unavailable.
 
+### GitHub Pages hosting
+
+The repository includes a GitHub Actions workflow that builds Storybook and
+the docs site, then publishes them to GitHub Pages.
+
+- Site index: https://<your-user>.github.io/<repo>/
+- Docs: https://<your-user>.github.io/<repo>/docs/
+- Storybook: https://<your-user>.github.io/<repo>/storybook/
+
 ### Development
 
 - Build: npm run build
